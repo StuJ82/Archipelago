@@ -1,41 +1,41 @@
-import json
-from pathlib import Path
-from typing import Any
-
-
-SONGS_DIRECTORY = Path(__file__).parent
-
-
-def read_json(path: Path) -> Any:
-    with path.open(encoding="utf-8") as file:
-        return json.load(file)
-
-
-def build_songs():
-    songs: dict[str, list[int]] = {}
-    song_folders = read_json(SONGS_DIRECTORY / "songs.json")
-
-    for folder_name in song_folders:
-        song_directory = SONGS_DIRECTORY / folder_name
-        title = read_json(song_directory / "en.json")["TITLE"]
-        config = read_json(song_directory / "config.json")
-
-        difficulties: list[int] = []
-        for beatmap in config["beatmaps"]:
-            difficulty = int(beatmap["difficulty"])
-            if difficulty not in difficulties:
-                difficulties.append(difficulty)
-
-        songs[title] = difficulties
-        songs[title].sort()
-
-
-
-    return songs
-
-
-songs = build_songs()
-
-
-if __name__ == "__main__":
-    print(json.dumps(songs, ensure_ascii=False, indent=2))
+from pprint import pprint
+songs={'1812 Overture': [1, 2, 3, 4],
+ 'A B C D Little Star': [2, 3, 4],
+ 'Acceleringo': [2, 3, 4, 5],
+ 'Are We Not Birds?': [1, 2, 3, 4],
+ 'Bingo': [2, 3, 4, 5],
+ 'Bird Bossa': [2, 3, 4, 5],
+ 'Birdber Shop': [2, 3, 4],
+ 'Can Can': [3, 4, 5],
+ "Champ'd Up": [3, 4, 5],
+ 'Chirptune': [1, 2, 3],
+ 'Civic Doodle': [2, 3, 4],
+ 'Dodo Re Mi': [2, 3, 4],
+ 'Fibbage 3': [2, 3, 4],
+ 'FixyText': [2, 3, 4],
+ 'Fur Elise': [2, 3, 4],
+ 'Habañera': [2, 3, 4],
+ 'Hypnotorious': [2, 3, 4],
+ 'In The Hall of the Mountain King': [2, 3, 4, 5],
+ 'Job Job': [2, 3, 4],
+ 'Maple Leaf Rag': [1, 2, 3, 4],
+ 'Moonlight Sonata': [2, 3, 4],
+ 'Nopus Opus': [1, 2, 3],
+ 'Pop Goes the Weasel': [1, 3, 4],
+ 'Quixort': [2, 3, 4],
+ 'Roomerang': [2, 3, 4],
+ 'Row, Row, Row, Your Boat': [1, 2, 3],
+ 'Serious Birdsness': [1, 2, 3],
+ 'Split The Room': [1, 2, 3, 4],
+ 'Tee K.O. 2': [2, 3, 4, 5],
+ 'The Devils and the Details': [2, 3, 4, 5],
+ 'The Flight of the Bumblebee': [2, 3, 4],
+ 'The Flower Duet': [2, 3, 4, 5],
+ 'The Wedding March': [2, 3, 4, 5],
+ 'The Wheel of Enormous Proportions': [2, 3, 4, 5],
+ 'Timejinx': [1, 2, 3, 4],
+ 'Tipsy Loon': [3, 4, 5],
+ 'Trivia Murder Party 2': [1, 3, 4],
+ 'Tutorial: Nature Is Cruel': [4],
+ 'Weapons Drawn': [2, 3, 4],
+ "You Don't Know Jack: Full Stream": [2, 3, 4]}
