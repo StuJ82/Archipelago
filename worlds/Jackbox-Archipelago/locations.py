@@ -1,6 +1,6 @@
 from BaseClasses import Location
-from worlds.apquest.locations import create_regular_locations
 from .world import DodoReMiWorld
+from .items import songs_to_difficulties, Dodo
 
 locations_to_id={'1812 Overture - Survived': 1,
  '1812 Overture - Bronze': 2,
@@ -441,22 +441,28 @@ def create_all_locations(world: DodoReMiWorld) -> None:
 
 
 def create_regular_locations(world: DodoReMiWorld) -> None:
- regions=world.get_regions()
- for region in regions:
-  name,diff=region.name.split("-")
-  liste=[]
-  for elt in locations_to_id.keys():
-   if name in elt:
-    liste.append(elt)
-   region.add_locations(get_location_names_with_ids(liste),DodoReMiLocation)
+ for title, difficulties in songs_to_difficulties.items():
 
-def create_events(world: DodoReMiWorld) -> None:
+  song = world.get_region(title)
+  medal_names = [
+   f"{title} - {medal}" for medal in ("Survived", "Bronze", "Silver", "Gold")
+  ]
+  song.add_locations(get_location_names_with_ids(medal_names),DodoReMiLocation)
+
+  for difficulty in difficulties:
+   region_name = f"{title} - Difficulty {difficulty}"
+   region = world.get_region(region_name)
+   location_names = [
+    f"{title} - Difficulty: {difficulty} - Survived",
+    f"{title} - Difficulty: {difficulty} - Full Combo",
+   ]
+   region.add_locations(
+    get_location_names_with_ids(location_names),
+    DodoReMiLocation,
+   )
+
+def create_events():
  pass
-
-
-
-
-
 
 
 

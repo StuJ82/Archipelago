@@ -1,7 +1,6 @@
 from BaseClasses import Region
 from rule_builder.rules import *
 
-
 from .items import songs_to_difficulties as songs
 from .world import DodoReMiWorld
 
@@ -17,8 +16,9 @@ def create_all_regions(world: DodoReMiWorld) -> None:
     regions = [main_menu]
 
     for title, difficulties in songs.items():
+        regions.append(Region(title, world.player, world.multiworld)) #une région qui sera reliee aux autres (contient Survived, Bronze, Silver, Gold)
         for difficulty in difficulties:
-            region_name = f"{title} - Difficulty: {difficulty}"
+            region_name = f"{title} - Difficulty {difficulty}"
             region = Region(region_name, world.player, world.multiworld)
             regions.append(region)
             

@@ -1,3 +1,7 @@
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .world import DodoReMiWorld
+from BaseClasses import Item, ItemClassification
 songs_to_difficulties={
  '1812 Overture': [1, 2, 3, 4],
  'A B C D Little Star': [2, 3, 4],
@@ -40,7 +44,7 @@ songs_to_difficulties={
  'Weapons Drawn': [2, 3, 4],
  "You Don't Know Jack: Full Stream": [2, 3, 4]}
 
-item_name_to_id ={
+ITEM_NAME_TO_ID ={
  '1812 Overture - Difficulty 1 Unlock': 1,
  '1812 Overture - Difficulty 2 Unlock': 2,
  '1812 Overture - Difficulty 3 Unlock': 3,
@@ -175,3 +179,36 @@ item_name_to_id ={
  "You Don't Know Jack: Full Stream - Difficulty 4 Unlock": 132}
 
 
+class DodoReMiItem(Item):
+ game="Dodo Re Mi"
+
+DEFAULT_ITEM_CLASSIFICATIONS={
+song: ItemClassification.progression for song in songs_to_difficulties
+}
+
+def ger_random_filler_item_name(world:DodoReMiWorld):
+ if world.random.randint(0,99) < world.options.trap_chance:
+  return "Bonus"
+ return "Malus"
+
+
+def create_item_with_correct_classification(world:DodoReMiWorld,name:str):
+ classification = DEFAULT_ITEM_CLASSIFICATIONS[name]
+
+ return DodoReMiItem(name,classification,ITEM_NAME_TO_ID[name],world.player)
+
+
+def create_all_items(world:DodoReMiWorld):
+ itempool: list[Item] = [
+  world.create_item(song) for song in ITEM_NAME_TO_ID.keys()
+ ]
+
+
+
+ #creating filler items -- to the end of this file
+ number_of_items = len(itempool)
+ number_of_unfilled_locations = len(world.multiworld.get_unfilled_locations(world.player))
+ needed_number_of_filler_items = number_of_unfilled_locations - number_of_items
+ itempool+=[world.create_filler() for _ in range(needed_number_of_filler_items)]
+
+ world.multiworld.itempool+=itempool

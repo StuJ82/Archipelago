@@ -1,4 +1,6 @@
 from worlds.AutoWorld import World
+from .regions import create_and_connect_regions
+from . import options
 
 class DodoReMiWorld(World):
     """
@@ -6,14 +8,14 @@ class DodoReMiWorld(World):
     The game features a variety of songs and difficulty levels, challenging players to improve their timing and accuracy.
     """
 
-    game = "Dodo Ré Mi"
+    game = "Dodo Re Mi"
 
     # The WebWorld is a definition class that governs how this world will be displayed on the website.
     web = None  # Placeholder for web world implementation
 
     # This is how we associate the options defined in our options.py with our world.
     options_dataclass = None  # Placeholder for options dataclass
-    options: None  # Placeholder for options type
+    options: options.DodoReMiOptions  # Placeholder for options type
 
     # Our world class must have a static location_name_to_id and item_name_to_id defined.
     location_name_to_id = {}  # Placeholder for location name to ID mapping
@@ -24,7 +26,7 @@ class DodoReMiWorld(World):
     def create_regions(self) -> None:
         from .regions import create_all_regions
 
-        create_all_regions(self)
+        create_and_connect_regions(self)
 
     def set_rules(self) -> None:
         pass  # Placeholder for rule setting logic
