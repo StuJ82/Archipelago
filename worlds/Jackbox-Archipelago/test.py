@@ -1,0 +1,56 @@
+import pprint
+songs_to_difficulties={
+ '1812 Overture': [1, 2, 3, 4],
+ 'A B C D Little Star': [2, 3, 4],
+ 'Acceleringo': [2, 3, 4, 5],
+ 'Are We Not Birds?': [1, 2, 3, 4],
+ 'Bingo': [2, 3, 4, 5],
+ 'Bird Bossa': [2, 3, 4, 5],
+ 'Birdber Shop': [2, 3, 4],
+ 'Can Can': [3, 4, 5],
+ "Champ'd Up": [3, 4, 5],
+ 'Chirptune': [1, 2, 3],
+ 'Civic Doodle': [2, 3, 4],
+ 'Dodo Re Mi': [2, 3, 4],
+ 'Fibbage 3': [2, 3, 4],
+ 'FixyText': [2, 3, 4],
+ 'Fur Elise': [2, 3, 4],
+ 'Habañera': [2, 3, 4],
+ 'Hypnotorious': [2, 3, 4],
+ 'In The Hall of the Mountain King': [2, 3, 4, 5],
+ 'Job Job': [2, 3, 4],
+ 'Maple Leaf Rag': [1, 2, 3, 4],
+ 'Moonlight Sonata': [2, 3, 4],
+ 'Nopus Opus': [1, 2, 3],
+ 'Pop Goes the Weasel': [1, 3, 4],
+ 'Quixort': [2, 3, 4],
+ 'Roomerang': [2, 3, 4],
+ 'Row, Row, Row, Your Boat': [1, 2, 3],
+ 'Serious Birdsness': [1, 2, 3],
+ 'Split The Room': [1, 2, 3, 4],
+ 'Tee K.O. 2': [2, 3, 4, 5],
+ 'The Devils and the Details': [2, 3, 4, 5],
+ 'The Flight of the Bumblebee': [2, 3, 4],
+ 'The Flower Duet': [2, 3, 4, 5],
+ 'The Wedding March': [2, 3, 4, 5],
+ 'The Wheel of Enormous Proportions': [2, 3, 4, 5],
+ 'Timejinx': [1, 2, 3, 4],
+ 'Tipsy Loon': [3, 4, 5],
+ 'Trivia Murder Party 2': [1, 3, 4],
+ 'Tutorial: Nature Is Cruel': [4],
+ 'Weapons Drawn': [2, 3, 4],
+ "You Don't Know Jack: Full Stream": [2, 3, 4]}
+
+songs={}
+count=1
+for song,difficulties in songs_to_difficulties.items():
+    if song!="Dodo Re Mi":
+        for i in range(len(difficulties)):
+            if i==0:
+                songs[f"{song} - Difficulty {difficulties[i]} Unlock"] = count
+                count+=1
+            else:
+                for j in range(1,i+2):
+                    songs[f"{song} - Difficulty {difficulties[i]} Unlock: Part {j}/{i+1}"]= count
+                    count += 1
+pprint.pprint(songs)

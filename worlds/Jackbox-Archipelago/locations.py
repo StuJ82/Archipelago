@@ -1,8 +1,9 @@
 from BaseClasses import Location
 from .world import DodoReMiWorld
-from .items import songs_to_difficulties, Dodo
+from .items import songs_to_difficulties
 
-locations_to_id={'1812 Overture - Survived': 1,
+locations_to_id={
+ '1812 Overture - Survived': 1,
  '1812 Overture - Bronze': 2,
  '1812 Overture - Silver': 3,
  '1812 Overture - Gold': 4,
@@ -437,7 +438,7 @@ def get_location_names_with_ids(location_names: list[str]) -> dict[str, int | No
 
 def create_all_locations(world: DodoReMiWorld) -> None:
  create_regular_locations(world)
- create_events(world)
+ create_events()
 
 
 def create_regular_locations(world: DodoReMiWorld) -> None:
@@ -465,5 +466,4 @@ def create_events():
  pass
 
 
-
-
+#modifier les id, ajouter 1000 à chaque chanson différente

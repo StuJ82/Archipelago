@@ -141,7 +141,6 @@ def set_completion_condition(world: APQuestWorld) -> None:
     # So lets undo what we just did, and instead set the completion condition to:
     world.set_completion_rule(Has("Victory"))
 
-
 # One final comment about rules:
 # If your world exclusively uses Rule Builder rules (like APQuest), it's worth trying CachedRuleBuilderWorld.
 # CachedRuleBuilderWorld is a subclass of World that has a bunch of caching magic to make rules faster.

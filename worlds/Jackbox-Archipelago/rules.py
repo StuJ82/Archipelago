@@ -18,5 +18,5 @@ def set_all_entrance_rules(world: DodoReMiWorld) -> None:
 def set_all_location_rules(world: DodoReMiWorld) -> None:
     pass
 def set_completion_condition(world: DodoReMiWorld) -> None:
-    world.set_completion_condition(CanReachLocation('Dodo Re Mi - Survived'))
+    world.set_completion_rule(CanReachLocation('Dodo Re Mi - Survived'))
 
