@@ -1,0 +1,74 @@
+Configured authentication: Managed by agent
+
+Je vais examiner `regions.py` et les fichiers Jackbox directement liés pour expliquer précisément son fonctionnement et la démarche à suivre en Python, sans modifier le code.
+
+`regions.py` construit le graphe de progression du monde : le menu principal mène aux chansons, puis chaque chanson mène à ses régions de difficulté. Les accès dépendent des items que le joueur possède.
+
+### La démarche, étape par étape
+
+1. **Récupérer les données qui décrivent les chansons.**
+   Dans `items.py`, `songs_to_difficulties` associe chaque chanson à une liste de difficultés. La variable `items` contient, elle, les noms et identifiants des items de déblocage, regroupés dans une liste de dictionnaires. Les régions utilisent ces données pour construire le graphe et vérifier ses accès.
+
+   Les imports de `items.py` sont faits **à l’intérieur** de `create_and_connect_regions`. C’est volontaire : `world.py` importe `regions.py`, et un import immédiat des items pourrait créer une boucle d’imports.
+
+2. **Trouver les items qui débloquent une difficulté.**
+   La fonction `get_difficulty_unlock_items(song, difficulty, song_unlock_items)` fabrique le nom attendu, par exemple :
+
+   ```python
+   unlock_name = f"{song} - Difficulty {difficulty} Unlock"
+   ```
+
+   Elle parcourt ensuite les dictionnaires et renvoie les noms d’items qui correspondent exactement à ce nom ou qui commencent par ce nom suivi de `": Part "`. Le résultat est un tuple de noms; les identifiants numériques des items ne sont pas utilisés par cette fonction.
+
+   Ce filtre gère les déblocages en plusieurs parties. Par exemple, une difficulté peut exiger à la fois `... Unlock: Part 1/2` et `... Unlock: Part 2/2`.
+
+3. **Créer toutes les régions avant de les relier.**
+   La fonction crée :
+   - une région de départ, `Main Menu`;
+   - une région par chanson;
+   - une région par difficulté de chaque chanson.
+
+   Elle garde les objets dans deux dictionnaires :
+
+   ```python
+   song_regions[song] = song_region
+   difficulty_regions[song, difficulty] = difficulty_region
+   ```
+
+   Le couple `(song, difficulty)` sert de clé pour éviter de confondre, par exemple, la difficulté 3 de deux chansons différentes. Ensuite, `world.multiworld.regions += regions` ajoute toutes les régions au monde.
+
+4. **Relier le menu à chaque chanson.**
+   Pour une chanson, le code rassemble les items nécessaires pour chacune de ses difficultés. La chanson devient accessible si **au moins une** de ces difficultés est gratuite ou déverrouillée :
+
+   ```python
+   any(
+       not group_items
+       or all(state.has(item_name, world.player) for item_name in group_items)
+       for group_items in required_unlock_sets
+   )
+   ```
+
+   La logique est donc : **OR entre les difficultés**, mais **AND entre les items d’une même difficulté**. Si une difficulté n’a aucun item associé, elle est considérée comme accessible sans déblocage.
+
+5. **Relier chaque chanson à ses difficultés.**
+   Si la difficulté a des items de déblocage, tous sont requis :
+
+   ```python
+   all(state.has(item_name, world.player)
+       for item_name in required_unlock_items)
+   ```
+
+   S’il n’y en a aucun, la connexion est créée sans règle particulière, donc sans verrou d’item.
+
+6. **Éviter le piège classique des `lambda` dans une boucle.**
+   Le code capture les valeurs courantes dans des arguments par défaut, par exemple :
+
+   ```python
+   lambda state, required_unlock_items=difficulty_unlock_items: ...
+   ```
+
+   Sans cette capture, les fonctions créées par la boucle risqueraient de réutiliser toutes la valeur de la dernière difficulté parcourue. Le même principe est appliqué aux groupes d’items pour chaque chanson.
+
+### Si vous ajoutez une chanson ou une difficulté
+
+Il faut garder cohérentes les données utilisées par les étapes suivantes : ajouter la chanson et ses difficultés dans `songs_to_difficulties`, déclarer les items de déblocage correspondants dans `items.py` si ces accès doivent être verrouillés, puis vérifier que `locations.py` possède les noms et identifiants des emplacements associés. `world.py` orchestre l’ensemble : `create_regions()` appelle d’abord `create_and_connect_regions(self)`, puis ajoute les emplacements à ces régions. Les noms de régions doivent donc correspondre exactement entre `regions.py` et `locations.py`.
