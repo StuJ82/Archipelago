@@ -41,16 +41,24 @@ songs_to_difficulties={
  'Weapons Drawn': [2, 3, 4],
  "You Don't Know Jack: Full Stream": [2, 3, 4]}
 
-songs={}
+songs=[]
 count=1
 for song,difficulties in songs_to_difficulties.items():
-    if song!="Dodo Re Mi":
-        for i in range(len(difficulties)):
-            if i==0:
-                songs[f"{song} - Difficulty {difficulties[i]} Unlock"] = count
-                count+=1
-            else:
-                for j in range(1,i+2):
-                    songs[f"{song} - Difficulty {difficulties[i]} Unlock: Part {j}/{i+1}"]= count
-                    count += 1
+ a={}
+ if song!="Dodo Re Mi":
+     for i in range(len(difficulties)):
+         if i==0:
+             a[f"{song} - Difficulty {difficulties[i]} Unlock"] = count
+             count+=1
+         else:
+             for j in range(1,i+2):
+                 a[f"{song} - Difficulty {difficulties[i]} Unlock: Part {j}/{i+1}"]= count
+                 count += 1
+ songs.append(a)
 pprint.pprint(songs)
+ITEM={}
+for liste in songs:
+ for item,value in liste.items():
+  ITEM[item]=value
+
+pprint.pprint(ITEM)

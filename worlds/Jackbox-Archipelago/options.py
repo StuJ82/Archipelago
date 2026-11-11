@@ -15,11 +15,11 @@ class TrapChance(Range):
 class BirdsNumber(Range):
     """
     Birds are collectibles you need to access the last level.
-    Set the number of them in the pool
+    Set the number of them in the pool, but we recommend 75-100
     """
     display_name = "Birds Number"
     range_start = 50
-    range_end = 150
+    range_end = 130
     default = 100
 
 class BirdsWin(Range):
